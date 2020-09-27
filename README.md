@@ -52,7 +52,7 @@ cp "$HOME"/tools/sublert/output/"$domain".txt /assets/subdomains/sublert.txt
 git clone https://github.com/projectdiscovery/subfinder.git
 cd subfinder/v2/cmd/subfinder
 go build .
-mv subfinder /usr/local/bin/
+cp subfinder /usr/local/bin/
 ```
 >Run
 ```
@@ -167,8 +167,48 @@ wc -l hosts.txt
 >Install dnsprobe
 ```
 GO111MODULE=on go get -u -v github.com/projectdiscovery/dnsprobe
+cp $HOME/go/bin/dnsprobe /usr/local/bin
 ```
 >Run
 ```
 cat subdomains.txt | dnsprobe -r CNAME -o subdomains_cname.txt
+```
+## Gather IP's
+>Run
+```
+cat subdomains.txt | dnsprobe -silent -f ip | sort -u | tee ips.txt
+```
+>Clean IP's - Use clean.py script from ReconPi repo - **Remember to give credits**
+```
+python3 $HOME/ReconPi/scripts/clean_ips.py ips.txt origin-ips.txt
+```
+# Subdomain Takeovers
+```
+	"$HOME"/go/bin/subjack -w "$SUBS"/hosts -a -ssl -t 50 -v -c "$HOME"/go/src/github.com/haccer/subjack/fingerprints.json -o "$SUBS"/all-takeover-checks.txt -ssl
+	grep -v "Not Vulnerable" <"$SUBS"/all-takeover-checks.txt >"$SUBS"/takeovers
+	rm "$SUBS"/all-takeover-checks.txt
+
+	vulnto=$(cat "$SUBS"/takeovers)
+	if [[ $vulnto == *i* ]]; then
+		echo -e "[$GREEN+$RESET] Possible subdomain takeovers:"
+		for line in "$SUBS"/takeovers; do
+			echo -e "[$GREEN+$RESET] --> $vulnto "
+		done
+	else
+		echo -e "[$GREEN+$RESET] No takeovers found."
+	fi
+
+	startFunction "nuclei to check takeover"
+	cat "$SUBS"/hosts | nuclei -t subdomain-takeover/ -c 50 -o "$SUBS"/nuclei-takeover-checks.txt
+	vulnto=$(cat "$SUBS"/nuclei-takeover-checks.txt)
+	if [[ $vulnto != "" ]]; then
+		echo -e "[$GREEN+$RESET] Possible subdomain takeovers:"
+		for line in "$SUBS"/nuclei-takeover-checks.txt; do
+			echo -e "[$GREEN+$RESET] --> $vulnto "
+		done
+	else
+		echo -e "[$GREEN+$RESET] No takeovers found."
+	fi
+}
+
 ```
