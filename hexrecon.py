@@ -41,8 +41,7 @@ def install_tools():
         print("Installing go...\n")
         os.system("snap install go --classic")
         print("Installing python-pip3...\n")
-        os.system("sudo apt-get install -y python3-pip")
-        
+        os.system("sudo apt-get install -y python3-pip")   
 
 if __name__ == "__main__":
         logo()
