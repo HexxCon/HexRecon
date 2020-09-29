@@ -34,11 +34,15 @@ def makedir(): # make directories in pwd
                 print("Domain supplied is not valid or the folder already exists.\n")
 
 def install_tools():
-        print("Checking for system updates...")
+        print("Checking for system updates...\n")
         os.system("sudo apt-get update -y")
-        print("Upgrading the system...")
+        print("Upgrading the system...\n")
         os.system("sudo apt-get upgrade -y")
-
+        print("Installing go...\n")
+        os.system("snap install go --classic")
+        print("Installing python-pip3...\n")
+        os.system("sudo apt-get install -y python3-pip")
+        
 
 if __name__ == "__main__":
         logo()
@@ -51,4 +55,4 @@ if __name__ == "__main__":
                 print("Please select an option. Use -h for help.\n")
         if install is not False:
                 install_tools()
-                            
+
