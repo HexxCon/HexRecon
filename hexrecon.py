@@ -21,7 +21,7 @@ def logo():
 ========== Made by hexcon - v0.1 ==========
 """)
 
-def makedir(): # make directories in pwd
+def make_output_dir(): # make directories in pwd
         path = "output"
 
         if not os.path.exists(path):
@@ -34,14 +34,18 @@ def makedir(): # make directories in pwd
                 print("Domain supplied is not valid or the folder already exists.\n")
 
 def install_tools():
-        print("Checking for system updates...\n")
-        os.system("sudo apt-get update -y")
+        print("\n\n\033[1;31mChecking for system updates...\n\033[1;37m")
+        sysupdate = ("sudo apt-get update -y")
+        os.system(sysupdate)
         print("Upgrading the system...\n")
-        os.system("sudo apt-get upgrade -y")
+        sysupgrade = ("sudo apt-get upgrade -y")
+        os.system(sysupgrade)
         print("Installing go...\n")
-        os.system("snap install go --classic")
+        goinstall = ("snap install go --classic")
+        os.system(goinstall)
         print("Installing python-pip3...\n")
-        os.system("sudo apt-get install -y python3-pip")   
+        pip3install = ("sudo apt-get install -y python3-pip")
+        os.system(pip3install)   
 
 if __name__ == "__main__":
         logo()
@@ -49,7 +53,7 @@ if __name__ == "__main__":
         url = args.url
         install = args.install
         if url is not False:
-                makedir()
+                make_output_dir()
         else:
                 print("Please select an option. Use -h for help.\n")
         if install is not False:
