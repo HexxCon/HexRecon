@@ -30,6 +30,7 @@ def makedir(): # make directories in pwd
         if not os.path.exists(path + "/" + url):
                 os.makedirs(path + "/" + url + "/resolvers")
                 os.makedirs(path + "/" + url + "/subdomains")
+                os.makedirs(path + "/" + url + "/endpoints")
                 os.makedirs(path + "/" + url + "/results")
                 print(url + " directory created.")
         else:
@@ -102,9 +103,26 @@ def sub_takeovers():
         os.system(runnucleitakeover)
         print("\n\033[1;31mnuclei Finished.\n\033[1;37m")
 
+def get_endpoints():
+        print("\n\033[1;31mScrape Endpoints ...\n\033[1;37m")
+        runscrape = ("cat "+subdir+"hosts.txt | sed 's/https\\?:\\/\\///' | gau > "+endpointsdir+"getallurls.txt; cat "+endpointsdir+"getallurls.txt  | sort -u | unfurl --unique keys > "+endpointsdir+"paramlist.txt")
+        os.system(runscrape)
+        print("\n\033[1;31mScrape Finished.\n\033[1;37m")
+
+def screen_shots():
+        print("\n\033[1;31mStarting Eyewitness ...\n\033[1;37m")
+        runeyewitness = ("python3 "+toolsdir+"EyeWitness/Python/EyeWitness.py -f "+subdir+"/hosts.txt --no-prompt -d "+resultsdir+"")
+        os.system(runeyewitness)
+        print("\n\033[1;31mEyewitness Finished.\n\033[1;37m")
+
+def port_scan():
+        print("\n\033[1;31mStarting nmap port scan ...\n\033[1;37m")
+        runportscan = ("cat "+subdir+"ips.txt | naabu -silent | bash "+toolsdir+"naabu2nmap.sh | tee "+resultsdir+"scan.nmap")
+        os.system(runportscan)
+        
 def save_results():
         print("\n\033[1;31mSaving Results ...\n\033[1;37m")  
-        runcopyresults = ("cp "+subdir+"subdomains.txt "+resultsdir+"subdomains.txt; cp "+subdir+"subdomains_cname.txt "+resultsdir+"subdomains_cname.txt; cp "+subdir+"ips.txt "+resultsdir+"ips.txt; cp "+subdir+"hosts.txt "+resultsdir+"hosts.txt")
+        runcopyresults = ("cp "+subdir+"subdomains.txt "+resultsdir+"subdomains.txt; cp "+subdir+"subdomains_cname.txt "+resultsdir+"subdomains_cname.txt; cp "+subdir+"ips.txt "+resultsdir+"ips.txt; cp "+subdir+"hosts.txt "+resultsdir+"hosts.txt; cp "+subdir+"subjack_takeovers.txt "+resultsdir+"subjack_takeovers.txt; cp "+subdir+"nuclei_takeovers.txt "+resultsdir+"nuclei_takeovers.txt")
         os.system(runcopyresults)
         print("\n\033[1;31mResults saved in "+resultsdir+"\n\033[1;37m")
         print("\n\033[1;31mFinished.\n\033[1;37m") 
@@ -166,24 +184,49 @@ def install_tools():
         installnucleitemp = ("cd "+toolsdir+"; git clone https://github.com/projectdiscovery/nuclei-templates.git")
         os.system(installnuclei)
         os.system(installnucleitemp)
+        print("\n\033[1;31mInstalling nmap ...\n\033[1;37m")
+        installnmap = ("apt install nmap")
+        os.system(installnmap)
+        print("\n\033[1;31mInstalling naabu ...\n\033[1;37m")
+        installnaabu = ("GO111MODULE=on go get -u -v github.com/projectdiscovery/naabu/cmd/naabu")
+        os.system(installnaabu)
+        print("\n\033[1;31mInstalling naabu2nmap ...\n\033[1;37m")
+        installnaabu2nmap = ("wget https://raw.githubusercontent.com/maverickNerd/naabu/master/scripts/naabu2nmap.sh -O "+toolsdir+"naabu2nmap.sh; chmod +x "+toolsdir+"naabu2nmap.sh")
+        os.system(installnaabu2nmap)
+        print("\n\033[1;31mInstalling Eyewitness ...\n\033[1;37m")
+        installeyewitness = ("cd "+toolsdir+"; git clone https://github.com/FortyNorthSecurity/EyeWitness.git; bash "+toolsdir+"EyeWitness/Python/setup/setup.sh")
+        os.system(installeyewitness)
+        print("\n\033[1;31mInstalling gau ...\n\033[1;37m")
+        installgau = ("go get -u -v github.com/lc/gau")
+        os.system(installgau)
+        print("\n\033[1;31mInstalling unfurl ...\n\033[1;37m")
+        installunfurl = ("go get -u -v github.com/tomnomnom/unfurl")
+        os.system(installunfurl)
+        print("\n\033[1;31mInstalling httpx ...\n\033[1;37m")
+        installhttpx = ("GO111MODULE=on go get -u -v github.com/projectdiscovery/httpx/cmd/httpx")
+        os.system(installhttpx)
+
 
 if __name__ == "__main__":    
         logo()
         args = get_args()
         url = args.url
-        toolsdir = "/root/tools/"
-        godir = "/root/go/"
-        subdir = "/root/HexRecon/output/"+url+"/subdomains/"
-        resolvedir = "/root/HexRecon/output/"+url+"/resolvers/"
-        resultsdir = "/root/HexRecon/output/"+url+"/results/"
         install = args.install
+        toolsdir = "/root/tools/"
+        godir = "/root/go/"      
         if url is not False:
+                subdir = "/root/HexRecon/output/"+url+"/subdomains/"
+                resolvedir = "/root/HexRecon/output/"+url+"/resolvers/"
+                resultsdir = "/root/HexRecon/output/"+url+"/results/"  
+                endpointsdir = "/root/HexRecon/output/"+url+"/endpoints/"
                 makedir()
                 sub_enum()
                 sub_resolve()
                 sub_takeovers()
+                get_endpoints()
+                screen_shots()
+                port_scan()
                 save_results()
-
         else:
                 print("Please select an option. Use -h for help.\n")
         if install is not False:
