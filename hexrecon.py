@@ -107,11 +107,15 @@ def get_endpoints():
         print("\n\033[1;31mScraping Endpoints ...\n\033[1;37m")
         runscrape = ("cat "+subdir+"hosts.txt | sed 's/https\\?:\\/\\///' | gau > "+endpointsdir+"getallurls.txt; cat "+endpointsdir+"getallurls.txt  | sort -u | unfurl --unique keys > "+endpointsdir+"paramlist.txt")
         os.system(runscrape)
+        runscrape1 = ("cat "+endpointsdir+"getallurls.txt | sort -u | grep -P "+print("\\w+\\.js(\\?|$)")+" | httpx -silent -status-code | awk '{print $1}' | sort -u > "+endpointsdir+"jsurls.txt; cat "+endpointsdir+"getallurls.txt | sort -u | grep -P "+print("\\w+\\.php(\\?|$)")+" | httpx -silent -status-code | awk '{print $1}' | sort -u > "+endpointsdir+"phpurls.txt; cat "+endpointsdir+"getallurls.txt | sort -u | grep -P "+print("\\w+\\.aspx(\\?|$")+" | httpx -silent -status-code | awk '{print $1}' | sort -u > "+endpointsdir+"aspxurls.txt; cat "+endpointsdir+"getallurls.txt  | sort -u | grep -P "+print("\\w+\\.jsp(\\?|$")+" | httpx -silent -status-code | awk '{print $1}' | sort -u > "+endpointsdir+"jspurls.txt")
+        os.system(runscrape1)
+        runscrape3 = ("cat "+subdir+"hosts.txt | httpx -path //server-status?full=true -status-code -content-length | awk '{print $1}' | sort -u > "+endpointsdir+"server-status.txt; cat "+subdir+"hosts.txt | httpx -ports 80,443,8009,8080,8081,8090,8180,8443 -path /web-console/ -status-code -content-length | awk '{print $1}' | sort -u > "+endpointsdir+"web-consoles.txt; cat "+subdir+"hosts.txt | httpx -path /phpinfo.php -status-code -content-length -title | awk '{print $1}' | sort -u > "+endpointsdir+"phpinfo.txt")
+        os.system(runscrape3)
         print("\n\033[1;31mScrape Finished.\n\033[1;37m")
 
-        #cat hosts.txt | httpx -path //server-status?full=true -status-code -content-length
-        #cat hosts.txt | httpx -ports 80,443,8009,8080,8081,8090,8180,8443 -path /web-console/ -status-code -content-length
-        #cat hosts.txt | httpx -path /phpinfo.php -status-code -content-length -title
+        #cat hosts.txt | httpx -path //server-status?full=true -status-code -content-length | awk '{print $1}' | sort -u > "+endpointsdir+"server-status.txt
+        #cat hosts.txt | httpx -ports 80,443,8009,8080,8081,8090,8180,8443 -path /web-console/ -status-code -content-length | awk '{print $1}' | sort -u > "+endpointsdir+"web-consoles.txt
+        #cat hosts.txt | httpx -path /phpinfo.php -status-code -content-length -title | awk '{print $1}' | sort -u > "+endpointsdir+"phpinfo.txt
         #hakrawler -url TARGET -plain | awk '/TARGET/{print $0}' | egrep -iv ".(jpg|jpeg|gif|css|tif|tiff|png|ttf|woff|woff2|ico|pdf|svg|txt|js)" | httpx -silent | Gxss -p TEST | awk '/URL/{print $0}' | cut -d '"' -f2 | sort -u | xargs -I@ http://xsstrike.py -u @ | tee -a result
         #assetfinder DOMAIN --subs-only | anew | massdns -r lists/resolvers.txt -t A -o S -w result.txt ; cat result.txt | sed 's/A.*//; s/CN.*// ; s/\..$//' | httpx -silent Fire
 
