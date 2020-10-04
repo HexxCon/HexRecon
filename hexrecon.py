@@ -218,7 +218,9 @@ def install_tools():
         print("\n\033[1;31mInstalling linkfinder ...\n\033[1;37m")
         installlinkfinder = ("cd "+toolsdir+"; git clone https://github.com/GerbenJavado/LinkFinder.git; cd LinkFinder; python3 setup.py install; pip3 install -r requirements.txt")
         os.system(installlinkfinder)
-
+        print("\n\033[1;31mInstalling secretfinder ...\n\033[1;37m")
+        installsecretfinder = ("cd "+toolsdir+"; git clone https://github.com/m4ll0k/SecretFinder.git secretfinder; cd secretfinder; pip install -r requirements.txt")
+        os.system(installsecretfinder)
 
 if __name__ == "__main__":    
         logo()
