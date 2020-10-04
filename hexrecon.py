@@ -111,12 +111,13 @@ def get_endpoints():
         os.system(runscrape1)
         #runscrape2 = ("cat "+subdir+"hosts.txt | httpx -path //server-status?full=true -status-code -content-length | awk '{print $1}' | sort -u > "+endpointsdir+"server-status.txt; cat "+subdir+"hosts.txt | httpx -ports 80,443,8009,8080,8081,8090,8180,8443 -path /web-console/ -status-code -content-length | awk '{print $1}' | sort -u > "+endpointsdir+"web-consoles.txt; cat "+subdir+"hosts.txt | httpx -path /phpinfo.php -status-code -content-length -title | awk '{print $1}' | sort -u > "+endpointsdir+"phpinfo.txt")
         #os.system(runscrape2)
-        #runlinkfinder = ("for js in `cat "+endpointsdir+"jsurls.txt`; do python3 "+toolsdir+"LinkFinder/linkfinder.py -i $js -o cli | sort -u > "+endpointsdir+"endpoints.txt; done")
-        #os.system(runlinkfinder)
+        print("\n\033[1;31mRunning LinkFinder ...\n\033[1;37m")
+        runlinkfinder = ("cat "+endpointsdir+"jsurls.txt | xargs -I{} python3 "+toolsdir+"/LinkFinder/linkfinder.py -i {} -o cli | sort -u | tee "+endpointsdir+"linkfinderjs.txt")       
+        os.system(runlinkfinder)
+        print("\n\033[1;31mRunning SecretFinder ...\n\033[1;37m")
+        runsecretfinder = ("cat "+endpointsdir+"jsurls.txt | xargs -I{} python3 "+toolsdir+"/secretfinder/SecretFinder.py -i {} -o cli | sort -u | tee "+endpointsdir+"secretfinderjs.txt")       
+        os.system(runsecretfinder)
         print("\n\033[1;31mScrape Finished.\n\033[1;37m")
-
-        #hakrawler -url TARGET -plain | awk '/TARGET/{print $0}' | egrep -iv ".(jpg|jpeg|gif|css|tif|tiff|png|ttf|woff|woff2|ico|pdf|svg|txt|js)" | httpx -silent | Gxss -p TEST | awk '/URL/{print $0}' | cut -d '"' -f2 | sort -u | xargs -I@ http://xsstrike.py -u @ | tee -a result
-        #assetfinder DOMAIN --subs-only | anew | massdns -r lists/resolvers.txt -t A -o S -w result.txt ; cat result.txt | sed 's/A.*//; s/CN.*// ; s/\..$//' | httpx -silent Fire
 
 def screen_shots():
         print("\n\033[1;31mStarting Eyewitness ...\n\033[1;37m")
