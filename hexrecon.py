@@ -107,15 +107,14 @@ def get_endpoints():
         print("\n\033[1;31mScraping Endpoints ...\n\033[1;37m")
         runscrape = ("cat "+subdir+"hosts.txt | sed 's/https\\?:\\/\\///' | gau > "+endpointsdir+"getallurls.txt; cat "+endpointsdir+"getallurls.txt  | sort -u | unfurl --unique keys > "+endpointsdir+"paramlist.txt")
         os.system(runscrape)
-        runscrape1 = ("cat "+endpointsdir+"getallurls.txt | sort -u | grep -P "+print("\\w+\\.js(\\?|$)")+" | httpx -silent -status-code | awk '{print $1}' | sort -u > "+endpointsdir+"jsurls.txt; cat "+endpointsdir+"getallurls.txt | sort -u | grep -P "+print("\\w+\\.php(\\?|$)")+" | httpx -silent -status-code | awk '{print $1}' | sort -u > "+endpointsdir+"phpurls.txt; cat "+endpointsdir+"getallurls.txt | sort -u | grep -P "+print("\\w+\\.aspx(\\?|$")+" | httpx -silent -status-code | awk '{print $1}' | sort -u > "+endpointsdir+"aspxurls.txt; cat "+endpointsdir+"getallurls.txt  | sort -u | grep -P "+print("\\w+\\.jsp(\\?|$")+" | httpx -silent -status-code | awk '{print $1}' | sort -u > "+endpointsdir+"jspurls.txt")
+        runscrape1 = ("cat "+endpointsdir+"getallurls.txt | sort -u | grep -P '\\w+\\.js(\\?|$)' | httpx -silent -status-code | awk '{print $1}' | sort -u > "+endpointsdir+"jsurls.txt; cat "+endpointsdir+"getallurls.txt | sort -u | grep -P '\\w+\\.php(\\?|$)' | httpx -silent -status-code | awk '{print $1}' | sort -u > "+endpointsdir+"phpurls.txt; cat "+endpointsdir+"getallurls.txt | sort -u | grep -P '\\w+\\.aspx(\\?|$)' | httpx -silent -status-code | awk '{print $1}' | sort -u > "+endpointsdir+"aspxurls.txt; cat "+endpointsdir+"getallurls.txt  | sort -u | grep -P '\\w+\\.jsp(\\?|$)' | httpx -silent -status-code | awk '{print $1}' | sort -u > "+endpointsdir+"jspurls.txt")
         os.system(runscrape1)
-        runscrape3 = ("cat "+subdir+"hosts.txt | httpx -path //server-status?full=true -status-code -content-length | awk '{print $1}' | sort -u > "+endpointsdir+"server-status.txt; cat "+subdir+"hosts.txt | httpx -ports 80,443,8009,8080,8081,8090,8180,8443 -path /web-console/ -status-code -content-length | awk '{print $1}' | sort -u > "+endpointsdir+"web-consoles.txt; cat "+subdir+"hosts.txt | httpx -path /phpinfo.php -status-code -content-length -title | awk '{print $1}' | sort -u > "+endpointsdir+"phpinfo.txt")
-        os.system(runscrape3)
+        #runscrape2 = ("cat "+subdir+"hosts.txt | httpx -path //server-status?full=true -status-code -content-length | awk '{print $1}' | sort -u > "+endpointsdir+"server-status.txt; cat "+subdir+"hosts.txt | httpx -ports 80,443,8009,8080,8081,8090,8180,8443 -path /web-console/ -status-code -content-length | awk '{print $1}' | sort -u > "+endpointsdir+"web-consoles.txt; cat "+subdir+"hosts.txt | httpx -path /phpinfo.php -status-code -content-length -title | awk '{print $1}' | sort -u > "+endpointsdir+"phpinfo.txt")
+        #os.system(runscrape2)
+        #runlinkfinder = ("for js in `cat "+endpointsdir+"jsurls.txt`; do python3 "+toolsdir+"LinkFinder/linkfinder.py -i $js -o cli | sort -u > "+endpointsdir+"endpoints.txt; done")
+        #os.system(runlinkfinder)
         print("\n\033[1;31mScrape Finished.\n\033[1;37m")
 
-        #cat hosts.txt | httpx -path //server-status?full=true -status-code -content-length | awk '{print $1}' | sort -u > "+endpointsdir+"server-status.txt
-        #cat hosts.txt | httpx -ports 80,443,8009,8080,8081,8090,8180,8443 -path /web-console/ -status-code -content-length | awk '{print $1}' | sort -u > "+endpointsdir+"web-consoles.txt
-        #cat hosts.txt | httpx -path /phpinfo.php -status-code -content-length -title | awk '{print $1}' | sort -u > "+endpointsdir+"phpinfo.txt
         #hakrawler -url TARGET -plain | awk '/TARGET/{print $0}' | egrep -iv ".(jpg|jpeg|gif|css|tif|tiff|png|ttf|woff|woff2|ico|pdf|svg|txt|js)" | httpx -silent | Gxss -p TEST | awk '/URL/{print $0}' | cut -d '"' -f2 | sort -u | xargs -I@ http://xsstrike.py -u @ | tee -a result
         #assetfinder DOMAIN --subs-only | anew | massdns -r lists/resolvers.txt -t A -o S -w result.txt ; cat result.txt | sed 's/A.*//; s/CN.*// ; s/\..$//' | httpx -silent Fire
 
@@ -215,6 +214,9 @@ def install_tools():
         print("\n\033[1;31mInstalling httpx ...\n\033[1;37m")
         installhttpx = ("GO111MODULE=on go get -u -v github.com/projectdiscovery/httpx/cmd/httpx; cp "+godir+"bin/httpx /usr/local/bin")
         os.system(installhttpx)
+        print("\n\033[1;31mInstalling linkfinder ...\n\033[1;37m")
+        installlinkfinder = ("cd "+toolsdir+"; git clone https://github.com/GerbenJavado/LinkFinder.git; cd LinkFinder; python3 setup.py install; pip3 install -r requirements.txt")
+        os.system(installlinkfinder)
 
 
 if __name__ == "__main__":    
