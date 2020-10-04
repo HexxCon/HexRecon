@@ -21,7 +21,7 @@ def logo():
 ========== Made by hexcon - v0.1 ==========
 """)
 
-def makedir(): # make directories in pwd
+def make_dir(): # make directories in pwd
         path = "output"
 
         if not os.path.exists(path):
@@ -38,7 +38,7 @@ def makedir(): # make directories in pwd
                 print("Domain supplied is not valid or the folder already exists.\n")
 
 def sub_enum():
-        print("\n\033[1;31Enumerating Subdomains ...\n\033[1;37m")
+        print("\n\033[1;31mEnumerating Subdomains ...\n\033[1;37m")
         print("\n\033[1;31mFetching Resolver IP's ...\n\033[1;37m")
         runipresolve = ("wget https://raw.githubusercontent.com/janmasarik/resolvers/master/resolvers.txt -O "+resolvedir+"resolvers.txt; wc -l "+resolvedir+"resolvers.txt")
         os.system(runipresolve)
@@ -75,7 +75,7 @@ def sub_enum():
         runsortsubs = ("cat "+subdir+"*.txt | sort -u > "+subdir+"subdomains.txt; wc -l "+subdir+"subdomains.txt")
         os.system(runsortsubs)
 
-        print("\n\033[1;3mEnumeration Finished.\n\033[1;37m")
+        print("\n\033[1;31mEnumeration Finished.\n\033[1;37m")
 
 def sub_resolve():
         print("\n\033[1;31mResolving Subdomains ...\n\033[1;37m")
@@ -131,7 +131,7 @@ def get_endpoints():
 
 def run_meg():
         print("\n\033[1;31mStarting meg ...\n\033[1;37m")
-        runmeg = ("cd "+subdir+"; meg -d 1000 -v /; mv out meg")       
+        runmeg = ("cd "+subdir+"; meg -d 1000 -v / hosts.txt; mv out meg")       
         os.system(runmeg)
 
 def nuclei_scan():
@@ -153,6 +153,9 @@ def save_results():
         print("\n\033[1;31mSaving Results ...\n\033[1;37m")  
         runcopyresults = ("cp "+subdir+"subdomains.txt "+resultsdir+"subdomains.txt; cp "+subdir+"subdomains_cname.txt "+resultsdir+"subdomains_cname.txt; cp "+subdir+"ips.txt "+resultsdir+"ips.txt; cp "+subdir+"hosts.txt "+resultsdir+"hosts.txt")
         os.system(runcopyresults)
+        runzip = ("zip -r "+outputdir+""+url+".zip "+url+"")
+        os.system(runzip)
+        
         print("\n\033[1;31mResults saved in "+resultsdir+"\n\033[1;37m")
         print("\n\033[1;31mFinished.\n\033[1;37m") 
 
@@ -166,6 +169,10 @@ def install_tools():
 
         print("\n\033[1;31mUpgrading the system ...\n\033[1;37m")
         sysupgrade = ("sudo apt-get upgrade -y")
+        os.system(sysupgrade)
+
+        print("\n\033[1;31mInstalling zip ...\n\033[1;37m")
+        sysupgrade = ("sudo apt-get install zip -y")
         os.system(sysupgrade)
 
         print("\n\033[1;31mInstalling go ...\n\033[1;37m")
@@ -280,12 +287,13 @@ if __name__ == "__main__":
         toolsdir = "/root/tools/"
         godir = "/root/go/"      
         if url is not False:
+                outputdir = "/root/HexRecon/output/"
                 subdir = "/root/HexRecon/output/"+url+"/subdomains/"
                 resolvedir = "/root/HexRecon/output/"+url+"/resolvers/"
                 resultsdir = "/root/HexRecon/output/"+url+"/results/"  
                 endpointsdir = "/root/HexRecon/output/"+url+"/endpoints/"
                 nucleidir = "/root/HexRecon/output/"+url+"/nuclei/"
-                makedir()
+                make_dir()
                 sub_enum()
                 sub_resolve()
                 sub_takeovers()
