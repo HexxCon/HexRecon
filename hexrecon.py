@@ -95,14 +95,7 @@ def sub_resolve():
         os.system(rungetip)
 
         print("\n\033[1;31mResolving Subdomains Finished.\n\033[1;37m")
-
-def sub_xss():
-        print("\n\033[1;31mChecking for XSS ...\n\033[1;37m")
-        runcheckxss = ("cat "+subdir+"alive_subdomains.txt | httprobe -p http:81 -p http:8080 -p https:8443 | waybackurls | kxss | tee "+subdir+"xss.txt; wc -l "+subdir+"xss.txt")
-        os.system(runcheckxss)
-        runcheckxss2 = ("cat "+endpointsdir+"getallurls.txt | egrep -v '(.css|.png|.jpeg|.jpg|.svg|.gif|.wolf)' | while read url; do vars=$(curl -s $url | grep -Eo \"var [a-zA-Z0-9]+\" | sed -e 's,'var','\"$url\"?',g' -e 's/ //g' | grep -v '.js' | sed 's/.*/&=xss/g'); echo -e \"\\e[1;33m$url\\n\\e[1;32m$vars\"; tee "+subdir+"xss2.txt; done; echo -e \"\\e[0m\"; wc -l "+subdir+"xss2.txt")
-        os.system(runcheckxss2)
-        
+     
 def sub_takeovers():
         print("\n\033[1;31mChecking Subdomain Takeovers ...\n\033[1;37m")
         print("\n\033[1;31mStarting subjack ...\n\033[1;37m")
@@ -135,6 +128,13 @@ def get_endpoints():
         os.system(runsecretfinder)
 
         print("\n\033[1;31mScraping Endpoints Finished.\n\033[1;37m")
+
+def sub_xss():
+        print("\n\033[1;31mChecking for XSS ...\n\033[1;37m")
+        runcheckxss = ("cat "+subdir+"alive_subdomains.txt | httprobe -p http:81 -p http:8080 -p https:8443 | waybackurls | kxss | tee "+endpointsdir+"xss.txt; wc -l "+endpointsdir+"xss.txt")
+        os.system(runcheckxss)
+        runcheckxss2 = ("cat "+endpointsdir+"getallurls.txt | egrep -v '(.css|.png|.jpeg|.jpg|.svg|.gif|.wolf)' | while read url; do vars=$(curl -s $url | grep -Eo \"var [a-zA-Z0-9]+\" | sed -e 's,'var','\"$url\"?',g' -e 's/ //g' | grep -v '.js' | sed 's/.*/&=xss/g'); echo -e \"\\e[1;33m$url\\n\\e[1;32m$vars\"; tee "+endpointsdir+"xssgau.txt; done; echo -e \"\\e[0m\"; wc -l "+endpointsdir+"xssgau.txt")
+        os.system(runcheckxss2)        
 
 def run_meg():
         print("\n\033[1;31mStarting meg ...\n\033[1;37m")
@@ -310,10 +310,10 @@ if __name__ == "__main__":
                 nucleidir = "/root/HexRecon/output/"+url+"/nuclei/"
                 make_dir()
                 sub_enum()
-                sub_resolve()
-                sub_xss()
+                sub_resolve()           
                 sub_takeovers()
                 get_endpoints()
+                sub_xss()
                 run_meg()
                 nuclei_scan()
                 screen_shots()
