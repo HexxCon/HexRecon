@@ -96,6 +96,11 @@ def sub_resolve():
 
         print("\n\033[1;31mResolving Subdomains Finished.\n\033[1;37m")
 
+def sub_xss():
+        print("\n\033[1;31mChecking for XSS ...\n\033[1;37m")
+        runcheckxss = ("cat "+subdir+"alive_subdomains.txt | httprobe -p http:81 -p http:8080 -p https:8443 | waybackurls | kxss | tee "+subdir+"xss.txt; wc -l "+subdir+"xss.txt")
+        os.system(runcheckxss)
+
 def sub_takeovers():
         print("\n\033[1;31mChecking Subdomain Takeovers ...\n\033[1;37m")
         print("\n\033[1;31mStarting subjack ...\n\033[1;37m")
@@ -127,6 +132,8 @@ def get_endpoints():
         runsecretfinder = ("cat "+endpointsdir+"jsurls.txt | xargs -I{} python3 "+toolsdir+"/secretfinder/SecretFinder.py -i {} -o cli | sort -u | tee "+endpointsdir+"secretfinderjs.txt")       
         os.system(runsecretfinder)
 
+        #cat getallurls.txt | egrep -v '(.css|.png|.jpeg|.jpg|.svg|.gif|.wolf)' | while read url; do vars=$(curl -s $url | grep -Eo "var [a-zA-Z0-9]+" | sed -e 's,'var','"$url"?',g' -e 's/ //g' | grep -v '.js' | sed 's/.*/&=xss/g'); echo -e "\e[1;33m$url\n\e[1;32m$vars"; done
+
         print("\n\033[1;31mScraping Endpoints Finished.\n\033[1;37m")
 
 def run_meg():
@@ -153,7 +160,7 @@ def save_results():
         print("\n\033[1;31mSaving Results ...\n\033[1;37m")  
         runcopyresults = ("cp "+subdir+"subdomains.txt "+resultsdir+"subdomains.txt; cp "+subdir+"subdomains_cname.txt "+resultsdir+"subdomains_cname.txt; cp "+subdir+"ips.txt "+resultsdir+"ips.txt; cp "+subdir+"hosts.txt "+resultsdir+"hosts.txt")
         os.system(runcopyresults)
-        runzip = ("zip -r "+outputdir+""+url+".zip "+url+"")
+        runzip = ("zip -r "+outputdir+""+url+".zip . "+url+"")
         os.system(runzip)
         
         print("\n\033[1;31mResults saved in "+resultsdir+"\n\033[1;37m")
@@ -279,6 +286,14 @@ def install_tools():
         installgf = ("go get -u github.com/tomnomnom/gf; cp "+godir+"bin/gf /usr/local/bin; cd "+toolsdir+"; git clone https://github.com/1ndianl33t/Gf-Patterns; cp "+toolsdir+"Gf-Patterns/*.json ~/.gf")
         os.system(installgf)
 
+        print("\n\033[1;31mInstalling waybackurls ...\n\033[1;37m")
+        installwaybackurls = ("go get -u github.com/tomnomnom/hacks/waybackurls; cp "+godir+"bin/waybackurls /usr/local/bin")
+        os.system(installwaybackurls)
+
+        print("\n\033[1;31mInstalling kxss ...\n\033[1;37m")
+        installkxss = ("go get -u github.com/tomnomnom/hacks/tree/master/kxss; cp "+godir+"bin/kxss /usr/local/bin")
+        os.system(installkxss)
+
 if __name__ == "__main__":    
         logo()
         args = get_args()
@@ -296,6 +311,7 @@ if __name__ == "__main__":
                 make_dir()
                 sub_enum()
                 sub_resolve()
+                sub_xss()
                 sub_takeovers()
                 get_endpoints()
                 run_meg()
