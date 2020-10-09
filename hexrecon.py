@@ -287,11 +287,11 @@ def install_tools():
         os.system(installgf)
 
         print("\n\033[1;31mInstalling waybackurls ...\n\033[1;37m")
-        installwaybackurls = ("go get -u github.com/tomnomnom/hacks/waybackurls; cp "+godir+"bin/waybackurls /usr/local/bin")
+        installwaybackurls = ("go get -u -v github.com/tomnomnom/hacks/waybackurls; cp "+godir+"bin/waybackurls /usr/local/bin")
         os.system(installwaybackurls)
 
         print("\n\033[1;31mInstalling kxss ...\n\033[1;37m")
-        installkxss = ("go get -u github.com/tomnomnom/hacks/tree/master/kxss; cp "+godir+"bin/kxss /usr/local/bin")
+        installkxss = ("cd "+toolsdir+"; git clone https://github.com/tomnomnom/hacks.git; cd hacks; cd kxss; go build; cp kxss /usr/local/bin")
         os.system(installkxss)
 
 if __name__ == "__main__":    
