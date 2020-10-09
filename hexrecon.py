@@ -160,7 +160,7 @@ def save_results():
         print("\n\033[1;31mSaving Results ...\n\033[1;37m")  
         runcopyresults = ("cp "+subdir+"subdomains.txt "+resultsdir+"subdomains.txt; cp "+subdir+"subdomains_cname.txt "+resultsdir+"subdomains_cname.txt; cp "+subdir+"ips.txt "+resultsdir+"ips.txt; cp "+subdir+"hosts.txt "+resultsdir+"hosts.txt")
         os.system(runcopyresults)
-        runzip = ("zip -r "+outputdir+""+url+".zip . "+outputdir+""+url+"")
+        runzip = ("cd "+outputdir+"; zip -r "+url+".zip "+url+"")
         os.system(runzip)
         
         print("\n\033[1;31mResults saved in "+resultsdir+"\n\033[1;37m")
