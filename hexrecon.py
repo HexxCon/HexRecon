@@ -100,7 +100,7 @@ def sub_xss():
         print("\n\033[1;31mChecking for XSS ...\n\033[1;37m")
         runcheckxss = ("cat "+subdir+"alive_subdomains.txt | httprobe -p http:81 -p http:8080 -p https:8443 | waybackurls | kxss | tee "+subdir+"xss.txt; wc -l "+subdir+"xss.txt")
         os.system(runcheckxss)
-        runcheckxss2 = ("cat getallurls.txt | egrep -v '(.css|.png|.jpeg|.jpg|.svg|.gif|.wolf)' | while read url; do vars=$(curl -s $url | grep -Eo \"var [a-zA-Z0-9]+\" | sed -e 's,'var','\"$url\"?',g' -e 's/ //g' | grep -v '.js' | sed 's/.*/&=xss/g'); echo -e \"\\e[1;33m$url\\n\\e[1;32m$vars\"; tee "+subdir+"xss2.txt; done; echo -e \"\\e[0m\"; wc -l "+subdir+"xss2.txt")
+        runcheckxss2 = ("cat "+subdir+"getallurls.txt | egrep -v '(.css|.png|.jpeg|.jpg|.svg|.gif|.wolf)' | while read url; do vars=$(curl -s $url | grep -Eo \"var [a-zA-Z0-9]+\" | sed -e 's,'var','\"$url\"?',g' -e 's/ //g' | grep -v '.js' | sed 's/.*/&=xss/g'); echo -e \"\\e[1;33m$url\\n\\e[1;32m$vars\"; tee "+subdir+"xss2.txt; done; echo -e \"\\e[0m\"; wc -l "+subdir+"xss2.txt")
         os.system(runcheckxss2)
         
 def sub_takeovers():
