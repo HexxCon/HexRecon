@@ -103,7 +103,7 @@ def sub_takeovers():
         os.system(runsubjack)
 
         print("\n\033[1;31mStarting nuclei ...\n\033[1;37m")
-        runnucleitakeover = ("cat "+subdir+"hosts.txt | nuclei -t "+toolsdir+"nuclei-templates/subdomain-takeover/ -c 50 -o "+subdir+"nuclei_takeovers.txt")
+        runnucleitakeover = ("cat "+subdir+"hosts.txt | nuclei -t "+toolsdir+"nuclei-templates/subdomain-takeover/ -o "+subdir+"nuclei_takeovers.txt")
         os.system(runnucleitakeover)
 
         print("\n\033[1;31mSubdomain Takeovers Finished.\n\033[1;37m")
@@ -143,7 +143,7 @@ def run_meg():
 
 def nuclei_scan():
         print("\n\033[1;31mStarting nuclei ...\n\033[1;37m")
-        runnuclei = ("nuclei -l "+subdir+"hosts.txt -t "+toolsdir+"nuclei-templates/generic-detections/ -c 50 -o "+nucleidir+"generic-detections.txt; nuclei -l "+subdir+"hosts.txt -t "+toolsdir+"nuclei-templates/cves/ -c 50 -o "+nucleidir+"cve.txt; nuclei -l "+subdir+"hosts.txt -t "+toolsdir+"nuclei-templates/default-credentials/ -c 50 -o "+nucleidir+"default-creds.txt; nuclei -l "+subdir+"hosts.txt -t "+toolsdir+"nuclei-templates/dns/ -c 50 -o "+nucleidir+"dns.txt; nuclei -l "+subdir+"hosts.txt -t "+toolsdir+"nuclei-templates/files/ -c 50 -o "+nucleidir+"files.txt; nuclei -l "+subdir+"hosts.txt -t "+toolsdir+"nuclei-templates/panels/ -c 50 -o "+nucleidir+"panels.txt; nuclei -l "+subdir+"hosts.txt -t "+toolsdir+"nuclei-templates/security-misconfiguration/ -c 50 -o "+nucleidir+"security-misconfiguration.txt; nuclei -l "+subdir+"hosts.txt -t "+toolsdir+"nuclei-templates/technologies/ -c 50 -o "+nucleidir+"technologies.txt; nuclei -l "+subdir+"hosts.txt -t "+toolsdir+"nuclei-templates/tokens/ -c 50 -o "+nucleidir+"tokens.txt; nuclei -l "+subdir+"hosts.txt -t "+toolsdir+"nuclei-templates/vulnerabilities/ -c 50 -o "+nucleidir+"vulnerabilties.txt")       
+        runnuclei = ("nuclei -l "+subdir+"hosts.txt -t "+toolsdir+"nuclei-templates/generic-detections/ -o "+nucleidir+"generic-detections.txt; nuclei -l "+subdir+"hosts.txt -t "+toolsdir+"nuclei-templates/cves/ -o "+nucleidir+"cve.txt; nuclei -l "+subdir+"hosts.txt -t "+toolsdir+"nuclei-templates/default-credentials/ -o "+nucleidir+"default-creds.txt; nuclei -l "+subdir+"hosts.txt -t "+toolsdir+"nuclei-templates/dns/ -o "+nucleidir+"dns.txt; nuclei -l "+subdir+"hosts.txt -t "+toolsdir+"nuclei-templates/files/ -o "+nucleidir+"files.txt; nuclei -l "+subdir+"hosts.txt -t "+toolsdir+"nuclei-templates/panels/ -o "+nucleidir+"panels.txt; nuclei -l "+subdir+"hosts.txt -t "+toolsdir+"nuclei-templates/security-misconfiguration/ -o "+nucleidir+"security-misconfiguration.txt; nuclei -l "+subdir+"hosts.txt -t "+toolsdir+"nuclei-templates/technologies/ -o "+nucleidir+"technologies.txt; nuclei -l "+subdir+"hosts.txt -t "+toolsdir+"nuclei-templates/tokens/ -o "+nucleidir+"tokens.txt; nuclei -l "+subdir+"hosts.txt -t "+toolsdir+"nuclei-templates/vulnerabilities/ -o "+nucleidir+"vulnerabilties.txt")       
         os.system(runnuclei)
 
 def screen_shots():
