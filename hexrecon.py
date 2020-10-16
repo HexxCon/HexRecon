@@ -120,12 +120,12 @@ def nuclei_scan():
             os.system(nuclei_tool)
 
 def screen_shots():
-        print("\n[\033[0;36m!\033[0;0m]\033[1;34m Starting Eyewitness ...\n\033[1;37m")
+        print("\n[\033[0;36m!\033[0;0m]\033[1;34m Running Eyewitness ...\n\033[1;37m")
         runeyewitness = ("python3 "+toolsdir+"EyeWitness/Python/EyeWitness.py -f "+subdir+"/hosts.txt --no-prompt -d "+resultsdir+"")
         os.system(runeyewitness)
 
 def port_scan():
-        print("\n[\033[0;36m!\033[0;0m]\033[1;34m Starting nmap port scan ...\n\033[1;37m")
+        print("\n[\033[0;36m!\033[0;0m]\033[1;34m nmap port scan ...\n\033[1;37m")
         runportscan = ("cat "+subdir+"ips.txt | naabu -silent | bash "+toolsdir+"naabu2nmap.sh | tee "+resultsdir+"scan.nmap")
         os.system(runportscan)
 
