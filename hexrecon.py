@@ -24,8 +24,12 @@ def logo():
 def make_dirs(): # make directories in pwd
         path = "output"
 
+        if not os.path.exists(defaultdir):
+                os.makedirs(defaultdir)
+
         if not os.path.exists(path):
                 os.makedirs(path)
+               
 
         if not os.path.exists(path + "/" + url):
                 os.makedirs(path + "/" + url + "/subdomains")
@@ -135,7 +139,7 @@ def save_results():
         runzip = ("cd "+outputdir+"; zip -r "+url+".zip "+url+"")
         os.system(runzip)
         
-        print("\n[\033[0;36m!\033[0;0m]\033[1;34m Results saved in "+resultsdir+"\n\033[1;37m")
+        print("\n[\033[0;36m!\033[0;0m]\033[1;32m Results saved in "+resultsdir+"\n\033[1;37m")
 
 def install_tools():
         if not os.path.exists(toolsdir):
@@ -172,21 +176,22 @@ def install_tools():
             print("\n[\033[0;32m+\033[0;0m]\033[1;34m Installing "+ i_msg +" ...\n\033[1;37m")
             os.system(i_tool)
 
-        print("\n\033[1;31mHexRecon is now ready to run.\n\033[1;37m")
+        print("\n[\033[0;36m!\033[0;0m]\033[1;32m HexRecon is now ready to run.\n\033[1;37m")
 
 if __name__ == "__main__":    
         logo()
         args = get_args()
         url = args.url
         install = args.install
-        toolsdir = "/root/tools/"
-        godir = "/root/go/"      
+        defaultdir = "$HOME/HexRecon/"
+        toolsdir = "$HOME/tools/"
+        godir = "$HOME/go/"      
         if url is not False:
-                outputdir = "/root/HexRecon/output/"
-                subdir = "/root/HexRecon/output/"+url+"/subdomains/"
-                resultsdir = "/root/HexRecon/output/"+url+"/results/"  
-                endpointsdir = "/root/HexRecon/output/"+url+"/endpoints/"
-                nucleidir = "/root/HexRecon/output/"+url+"/nuclei/"
+                outputdir = "$HOME/HexRecon/output/"
+                subdir = "$HOME/HexRecon/output/"+url+"/subdomains/"
+                resultsdir = "$HOME/HexRecon/output/"+url+"/results/"  
+                endpointsdir = "$HOME/HexRecon/output/"+url+"/endpoints/"
+                nucleidir = "$HOME/HexRecon/output/"+url+"/nuclei/"
                 make_dirs()
                 sub_enum()
                 sub_resolve()           
