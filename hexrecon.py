@@ -183,15 +183,15 @@ if __name__ == "__main__":
         args = get_args()
         url = args.url
         install = args.install
-        defaultdir = "$HOME/HexRecon/"
-        toolsdir = "$HOME/tools/"
-        godir = "$HOME/go/"      
+        defaultdir = "/root/HexRecon/"
+        toolsdir = "/root/tools/"
+        godir = "/root/go/"      
         if url is not False:
-                outputdir = "$HOME/HexRecon/output/"
-                subdir = "$HOME/HexRecon/output/"+url+"/subdomains/"
-                resultsdir = "$HOME/HexRecon/output/"+url+"/results/"  
-                endpointsdir = "$HOME/HexRecon/output/"+url+"/endpoints/"
-                nucleidir = "$HOME/HexRecon/output/"+url+"/nuclei/"
+                outputdir = "/root/HexRecon/output/"
+                subdir = "/root/HexRecon/output/"+url+"/subdomains/"
+                resultsdir = "/root/HexRecon/output/"+url+"/results/"  
+                endpointsdir = "/root/HexRecon/output/"+url+"/endpoints/"
+                nucleidir = "/root/HexRecon/output/"+url+"/nuclei/"
                 make_dirs()
                 sub_enum()
                 sub_resolve()           
