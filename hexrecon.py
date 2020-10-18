@@ -128,6 +128,15 @@ def port_scan():
         runportscan = ("cat "+subdir+"ips.txt | naabu -silent | bash "+toolsdir+"naabu2nmap.sh | tee "+resultsdir+"scan.nmap")
         os.system(runportscan)
 
+def save_results():
+        print("\n[\033[0;36m!\033[0;0m]\033[1;34m Saving Results ...\n\033[1;37m")
+        runcopyresults = ("cp "+subdir+"subdomains.txt "+resultsdir+"subdomains.txt; cp "+subdir+"subdomains_cname.txt "+resultsdir+"subdomains_cname.txt; cp "+subdir+"ips.txt "+resultsdir+"ips.txt; cp "+subdir+"hosts.txt "+resultsdir+"hosts.txt")
+        os.system(runcopyresults)
+        runzip = ("cd "+outputdir+"; zip -r "+url+".zip "+url+"")
+        os.system(runzip)
+        
+        print("\n[\033[0;36m!\033[0;0m]\033[1;34m Results saved in "+resultsdir+"\n\033[1;37m")
+
 def install_tools():
         if not os.path.exists(toolsdir):
                 os.makedirs(toolsdir)
@@ -188,6 +197,7 @@ if __name__ == "__main__":
                 nuclei_scan()
                 screen_shots()
                 port_scan()
+                save_results()
         else:
                 print("Please select an option. Use -h for help.\n")
         if install is not False:
