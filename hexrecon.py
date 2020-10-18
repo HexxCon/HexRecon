@@ -21,14 +21,13 @@ def logo():
 ========== Made by hexcon - v0.2 ==========
 """)
 
-def make_dir(): # make directories in pwd
+def make_dirs(): # make directories in pwd
         path = "output"
 
         if not os.path.exists(path):
                 os.makedirs(path)
 
         if not os.path.exists(path + "/" + url):
-                os.makedirs(path + "/" + url + "/resolvers")
                 os.makedirs(path + "/" + url + "/subdomains")
                 os.makedirs(path + "/" + url + "/endpoints")
                 os.makedirs(path + "/" + url + "/nuclei")
@@ -40,7 +39,7 @@ def make_dir(): # make directories in pwd
 def sub_enum():
         print("\n[\033[0;36m!\033[0;0m]\033[1;34m Enumerating Subdomains ...\n\033[1;37m")
 
-        enum = {"resolves":"wget https://raw.githubusercontent.com/janmasarik/resolvers/master/resolvers.txt -O "+resolvedir+"resolvers.txt; wc -l "+resolvedir+"resolvers.txt",
+        enum = {"resolves":"wget https://raw.githubusercontent.com/janmasarik/resolvers/master/resolvers.txt -O "+subdir+"resolvers.txt; wc -l "+subdir+"resolvers.txt",
                 "sublert":"cd "+toolsdir+"sublert; yes 2>/dev/null | python3 sublert.py -u "+url+"; cp "+toolsdir+"sublert/output/"+url+".txt "+subdir+"sublert.txt; wc -l "+subdir+"sublert.txt",
                 "subfinder":"subfinder -d "+url+" -all -o "+subdir+"subfinder.txt; wc -l "+subdir+"subfinder.txt",
                 "assetfinder":"assetfinder --subs-only "+url+" > "+subdir+"assetfinder.txt; wc -l "+subdir+"assetfinder.txt",
@@ -57,7 +56,7 @@ def sub_enum():
 def sub_resolve():
         print("\n[\033[0;36m!\033[0;0m]\033[1;34m Resolving Subdomains ...\n\033[1;37m")
 
-        resolve = {"resolve-subdomains":"cat "+subdir+"subdomains.txt | sort -u | shuffledns -silent -d "+url+" -r "+resolvedir+"resolvers.txt > "+subdir+"alive_subdomains.txt; wc -l "+subdir+"alive_subdomains.txt",
+        resolve = {"resolve-subdomains":"cat "+subdir+"subdomains.txt | sort -u | shuffledns -silent -d "+url+" -r "+subdir+"resolvers.txt > "+subdir+"alive_subdomains.txt; wc -l "+subdir+"alive_subdomains.txt",
                    "find-alive-hosts":"cat "+subdir+"alive_subdomains.txt | httprobe -prefer-https | tee "+subdir+"hosts.txt; wc -l "+subdir+"hosts.txt",
                    "get-cname":"cat "+subdir+"subdomains.txt | dnsprobe -r CNAME -o "+subdir+"subdomains_cname.txt; wc -l "+subdir+"subdomains_cname.txt",
                    "get-ip":"cat "+subdir+"subdomains.txt | dnsprobe -silent -f ip | sort -u | tee "+subdir+"ips.txt; wc -l "+subdir+"ips.txt"}
@@ -79,13 +78,13 @@ def sub_takeovers():
 def get_endpoints():
         print("\n[\033[0;36m!\033[0;0m]\033[1;34m Scraping Endpoints ...\n\033[1;37m")
 
-        endpoints = {"getallurls":"cat "+subdir+"hosts.txt | sed 's/https\\?:\\/\\///' | gau > "+endpointsdir+"getallurls.txt; cat "+endpointsdir+"getallurls.txt  | sort -u | unfurl --unique keys > "+endpointsdir+"paramlist.txt",
-                     "scrape-js":"cat "+endpointsdir+"getallurls.txt | sort -u | grep -P '\\w+\\.js(\\?|$)' | httpx -silent -status-code | awk '{print $1}' | sort -u > "+endpointsdir+"jsurls.txt",
-                     "scrape-php":"cat "+endpointsdir+"getallurls.txt | sort -u | grep -P '\\w+\\.php(\\?|$)' | httpx -silent -status-code | awk '{print $1}' | sort -u > "+endpointsdir+"phpurls.txt",
-                     "scrape-aspx":"cat "+endpointsdir+"getallurls.txt | sort -u | grep -P '\\w+\\.aspx(\\?|$)' | httpx -silent -status-code | awk '{print $1}' | sort -u > "+endpointsdir+"aspxurls.txt",
-                     "scrape-jsp":"cat "+endpointsdir+"getallurls.txt  | sort -u | grep -P '\\w+\\.jsp(\\?|$)' | httpx -silent -status-code | awk '{print $1}' | sort -u > "+endpointsdir+"jspurls.txt",
-                     "linkfinder":"cat "+endpointsdir+"jsurls.txt | xargs -I{} python3 "+toolsdir+"/LinkFinder/linkfinder.py -i {} -o cli | sort -u | tee "+endpointsdir+"linkfinderjs.txt",
-                     "secretfinder":"cat "+endpointsdir+"jsurls.txt | xargs -I{} python3 "+toolsdir+"/secretfinder/SecretFinder.py -i {} -o cli | sort -u | tee "+endpointsdir+"secretfinderjs.txt"}
+        endpoints = {"getallurls":"cat "+subdir+"hosts.txt | sed 's/https\\?:\\/\\///' | gau > "+endpointsdir+"getallurls.txt; cat "+endpointsdir+"getallurls.txt  | sort -u | unfurl --unique keys > "+endpointsdir+"paramlist.txt; wc -l "+endpointsdir+"paramlist.txt",
+                     "scrape-js":"cat "+endpointsdir+"getallurls.txt | sort -u | grep -P '\\w+\\.js(\\?|$)' | httpx -silent -status-code | awk '{print $1}' | sort -u > "+endpointsdir+"jsurls.txt; wc -l "+endpointsdir+"jsurls.txt",
+                     "scrape-php":"cat "+endpointsdir+"getallurls.txt | sort -u | grep -P '\\w+\\.php(\\?|$)' | httpx -silent -status-code | awk '{print $1}' | sort -u > "+endpointsdir+"phpurls.txt; wc -l "+endpointsdir+"phpurls.txt",
+                     "scrape-aspx":"cat "+endpointsdir+"getallurls.txt | sort -u | grep -P '\\w+\\.aspx(\\?|$)' | httpx -silent -status-code | awk '{print $1}' | sort -u > "+endpointsdir+"aspxurls.txt; wc -l "+endpointsdir+"aspxurls.txt",
+                     "scrape-jsp":"cat "+endpointsdir+"getallurls.txt  | sort -u | grep -P '\\w+\\.jsp(\\?|$)' | httpx -silent -status-code | awk '{print $1}' | sort -u > "+endpointsdir+"jspurls.txt; wc -l "+endpointsdir+"jspurls.txt",
+                     "linkfinder":"cat "+endpointsdir+"jsurls.txt | xargs -I{} python3 "+toolsdir+"/LinkFinder/linkfinder.py -i {} -o cli | sort -u | tee "+endpointsdir+"linkfinderjs.txt; wc -l "+endpointsdir+"linkfinderjs.txt",
+                     "secretfinder":"cat "+endpointsdir+"jsurls.txt | xargs -I{} python3 "+toolsdir+"/secretfinder/SecretFinder.py -i {} -o cli | sort -u | tee "+endpointsdir+"secretfinderjs.txt; wc -l "+endpointsdir+"secretfinderjs.txt"}
 
         for endpoints_msg, endpoints_tool in endpoints.items():
             print("\n[\033[0;32m+\033[0;0m]\033[1;34m Stage "+ endpoints_msg +" ...\n\033[1;37m")
@@ -176,11 +175,10 @@ if __name__ == "__main__":
         if url is not False:
                 outputdir = "/root/HexRecon/output/"
                 subdir = "/root/HexRecon/output/"+url+"/subdomains/"
-                resolvedir = "/root/HexRecon/output/"+url+"/resolvers/"
                 resultsdir = "/root/HexRecon/output/"+url+"/results/"  
                 endpointsdir = "/root/HexRecon/output/"+url+"/endpoints/"
                 nucleidir = "/root/HexRecon/output/"+url+"/nuclei/"
-                make_dir()
+                make_dirs()
                 sub_enum()
                 sub_resolve()           
                 sub_takeovers()
