@@ -18,7 +18,7 @@ def logo():
 | | | |  __/>  <| |\ \  __/ (_| (_) | | | |
 \_| |_/\___/_/\_\_| \_\___|\___\___/|_| |_|
                                           
-========== Made by hexcon - v0.2 ==========
+========== Made by hexcon - v0.3 ==========
 """)
 
 def make_dirs(): # make directories in pwd
