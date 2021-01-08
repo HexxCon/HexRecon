@@ -145,7 +145,8 @@ def install_tools():
         if not os.path.exists(toolsdir):
                 os.makedirs(toolsdir)
 
-        install = {"system updates":"sudo apt-get update -y; sudo apt-get upgrade -y; sudo apt-get install zip -y; snap install go --classic; sudo apt-get install -y python3-pip; apt install nmap -y",
+        install = {"system updates":"sudo apt-get update -y; sudo apt-get upgrade -y",
+                   "system packages":"sudo apt-get install zip -y; snap install go --classic; sudo apt-get install -y python3-pip; apt install nmap -y",
                    "sublert":"cd "+toolsdir+"; git clone https://github.com/yassineaboukir/sublert.git; cd sublert; pip3 install -r requirements.txt; chmod +x "+toolsdir+"sublert/sublert.py",
                    "subfinder":"cd "+toolsdir+"; git clone https://github.com/projectdiscovery/subfinder.git; cd subfinder/v2/cmd/subfinder; go build .; cp subfinder /usr/local/bin/",
                    "assetfinder":"go get -u -v github.com/tomnomnom/assetfinder; cp "+godir+"bin/assetfinder /usr/local/bin/",
