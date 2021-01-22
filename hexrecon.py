@@ -117,10 +117,9 @@ def nuclei_scan():
                   "nuclei-helpers":"nuclei -l "+subdir+"hosts.txt -t "+toolsdir+"nuclei-templates/helpers/ -o "+nucleidir+"helpers.txt",
                   "nuclei-misc":"nuclei -l "+subdir+"hosts.txt -t "+toolsdir+"nuclei-templates/miscellaneous/ -o "+nucleidir+"misc.txt",
                   "nuclei-misconfigs":"nuclei -l "+subdir+"hosts.txt -t "+toolsdir+"nuclei-templates/misconfiguration/ -o "+nucleidir+"misconfigurations.txt",
-                  "nuclei-techs":"nuclei -l "+subdir+"hosts.txt -t "+toolsdir+"nuclei-templates/technologies/ -o "+nucleidir+"technologies.txt"
-                  "nuclei-vulns":"nuclei -l "+subdir+"hosts.txt -t "+toolsdir+"nuclei-templates/vulnerabilities/ -o "+nucleidir+"vulnerabilities.txt"
-                  "nuclei-workflows":"nuclei -l "+subdir+"hosts.txt -t "+toolsdir+"nuclei-templates/workflows/ -o "+nucleidir+"workflows.txt"
-                  }
+                  "nuclei-techs":"nuclei -l "+subdir+"hosts.txt -t "+toolsdir+"nuclei-templates/technologies/ -o "+nucleidir+"technologies.txt",
+                  "nuclei-vulns":"nuclei -l "+subdir+"hosts.txt -t "+toolsdir+"nuclei-templates/vulnerabilities/ -o "+nucleidir+"vulnerabilities.txt",
+                  "nuclei-workflows":"nuclei -l "+subdir+"hosts.txt -t "+toolsdir+"nuclei-templates/workflows/ -o "+nucleidir+"workflows.txt"}
 
 
         for nuclei_msg, nuclei_tool in nuclei.items():
