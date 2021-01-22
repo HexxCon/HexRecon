@@ -73,7 +73,7 @@ def sub_takeovers():
         print("\n[\033[0;36m!\033[0;0m]\033[1;34m Checking Subdomain Takeovers ...\n\033[1;37m")
 
         takeovers = {"subjack":"subjack -w "+subdir+"hosts.txt -a -ssl -t 50 -v -c "+godir+"/src/github.com/haccer/subjack/fingerprints.json -o "+subdir+"subjack_takeovers.txt -ssl",
-                     "nuclei":"cat "+subdir+"hosts.txt | nuclei -t "+toolsdir+"nuclei-templates/subdomain-takeover/ -o "+subdir+"nuclei_takeovers.txt"}
+                     "nuclei":"cat "+subdir+"hosts.txt | nuclei -t "+toolsdir+"nuclei-templates/takeovers/ -o "+subdir+"nuclei_takeovers.txt"}
 
         for takeovers_msg, takeovers_tool in takeovers.items():
             print("\n[\033[0;32m+\033[0;0m]\033[1;34m Running "+ takeovers_msg +" ...\n\033[1;37m")
@@ -107,16 +107,21 @@ def run_meg():
 def nuclei_scan():
         print("\n[\033[0;36m!\033[0;0m]\033[1;34m Running nuclei Scanner ...\n\033[1;37m")
 
-        nuclei = {"nuclei-detections":"nuclei -l "+subdir+"hosts.txt -t "+toolsdir+"nuclei-templates/generic-detections/ -o "+nucleidir+"generic-detections.txt",
-                  "nuclei-cves":"nuclei -l "+subdir+"hosts.txt -t "+toolsdir+"nuclei-templates/cves/ -o "+nucleidir+"cve.txt",
-                  "nuclei-defaults":"nuclei -l "+subdir+"hosts.txt -t "+toolsdir+"nuclei-templates/default-credentials/ -o "+nucleidir+"default-creds.txt",
+        nuclei = {"nuclei-cves":"nuclei -l "+subdir+"hosts.txt -t "+toolsdir+"nuclei-templates/cves/ -o "+nucleidir+"cves.txt",
+                  "nuclei-defaultlogins":"nuclei -l "+subdir+"hosts.txt -t "+toolsdir+"nuclei-templates/default-logins/ -o "+nucleidir+"default-creds.txt",
                   "nuclei-dns":"nuclei -l "+subdir+"hosts.txt -t "+toolsdir+"nuclei-templates/dns/ -o "+nucleidir+"dns.txt",
-                  "nuclei-files":"nuclei -l "+subdir+"hosts.txt -t "+toolsdir+"nuclei-templates/files/ -o "+nucleidir+"files.txt",
-                  "nuclei-panels":"nuclei -l "+subdir+"hosts.txt -t "+toolsdir+"nuclei-templates/panels/ -o "+nucleidir+"panels.txt",
-                  "nuclei-tokens":"nuclei -l "+subdir+"hosts.txt -t "+toolsdir+"nuclei-templates/tokens/ -o "+nucleidir+"tokens.txt",
-                  "nuclei-vulns":"nuclei -l "+subdir+"hosts.txt -t "+toolsdir+"nuclei-templates/vulnerabilities/ -o "+nucleidir+"vulnerabilties.txt",
-                  "nuclei-techs":"nuclei -l "+subdir+"hosts.txt -t "+toolsdir+"nuclei-templates/technologies/ -o "+nucleidir+"technologies.txt",
-                  "nuclei-misconfigs":"nuclei -l "+subdir+"hosts.txt -t "+toolsdir+"nuclei-templates/security-misconfiguration/ -o "+nucleidir+"security-misconfiguration.txt"}
+                  "nuclei-panels":"nuclei -l "+subdir+"hosts.txt -t "+toolsdir+"nuclei-templates/exposed-panels/ -o "+nucleidir+"panels.txt",
+                  "nuclei-tokens":"nuclei -l "+subdir+"hosts.txt -t "+toolsdir+"nuclei-templates/exposed-tokens/ -o "+nucleidir+"tokens.txt",
+                  "nuclei-exposures":"nuclei -l "+subdir+"hosts.txt -t "+toolsdir+"nuclei-templates/exposures/ -o "+nucleidir+"exposures.txt",
+                  "nuclei-fuzzing":"nuclei -l "+subdir+"hosts.txt -t "+toolsdir+"nuclei-templates/fuzzing/ -o "+nucleidir+"fuzzing.txt",
+                  "nuclei-helpers":"nuclei -l "+subdir+"hosts.txt -t "+toolsdir+"nuclei-templates/helpers/ -o "+nucleidir+"helpers.txt",
+                  "nuclei-misc":"nuclei -l "+subdir+"hosts.txt -t "+toolsdir+"nuclei-templates/miscellaneous/ -o "+nucleidir+"misc.txt",
+                  "nuclei-misconfigs":"nuclei -l "+subdir+"hosts.txt -t "+toolsdir+"nuclei-templates/misconfiguration/ -o "+nucleidir+"misconfigurations.txt",
+                  "nuclei-techs":"nuclei -l "+subdir+"hosts.txt -t "+toolsdir+"nuclei-templates/technologies/ -o "+nucleidir+"technologies.txt"
+                  "nuclei-vulns":"nuclei -l "+subdir+"hosts.txt -t "+toolsdir+"nuclei-templates/vulnerabilities/ -o "+nucleidir+"vulnerabilities.txt"
+                  "nuclei-workflows":"nuclei -l "+subdir+"hosts.txt -t "+toolsdir+"nuclei-templates/workflows/ -o "+nucleidir+"workflows.txt"
+                  }
+
 
         for nuclei_msg, nuclei_tool in nuclei.items():
             print("\n[\033[0;32m+\033[0;0m]\033[1;34m Stage "+ nuclei_msg +" ...\n\033[1;37m")
