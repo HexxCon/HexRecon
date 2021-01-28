@@ -1,7 +1,7 @@
 # HexRecon
  Personal recon script for subdomain enumeration.
 
- Used on DigitalOcean Ubuntu 20.04 Droplet.
+ Used on DigitalOcean Ubuntu 20.04 Droplet as root.
 
 # Usage
 
